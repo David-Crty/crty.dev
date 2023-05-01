@@ -1,6 +1,6 @@
 dependencies:
 - name: generic-app
   repository: https://david-crty.github.io/helm-charts
-  version: 0.1.5
-digest: sha256:64bb918212202dc8ec82117a47245645c691b170b4f3baf58e5b731dafa5f07d
-generated: "2023-04-26T10:06:07.090512221+02:00"
+  version: 0.1.7
+digest: sha256:1f3729fc5d84c136de4bf3540edca819a0fad53ffac92f7ce955955d2b6b6c20
+generated: "2023-05-01T13:10:56.214901055+02:00"
