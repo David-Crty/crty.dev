@@ -1,0 +1,28 @@
+baseURL: 'https://crty.dev/'
+languageCode: 'en-us'
+title: 'David Courtey'
+theme: 'PaperMod'
+
+params:
+  hideCredits: false
+  profileMode:
+    enabled: true
+    title: "David Courtey" # optional default will be site title
+    subtitle: "DevOps - SRE - Backend Developer"
+#    imageUrl: "<image link>" # optional
+#    imageTitle: "<title of image as alt>" # optional
+#    imageWidth: 120 # custom size
+#    imageHeight: 120 # custom size
+#    buttons:
+#      - name: Twitter
+#        url: "https://twitter.com/DCourtey"
+#      - name: Github
+#        url: "https://github.com/David-Crty"
+
+  socialIcons: # optional
+    - name: "twitter"
+      url: "https://twitter.com/DCourtey"
+    - name: "github"
+      url: "https://github.com/David-Crty"
+    - name: "linkedin"
+      url: "https://www.linkedin.com/in/david-courtey-sre-devops/"
