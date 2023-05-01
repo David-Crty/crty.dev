@@ -1,0 +1,11 @@
+apiVersion: v2
+name: crty-dev
+description: The helm chart for the crty.dev website
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+dependencies:
+  - name: generic-app
+    version: 0.1.5
+    repository: "https://david-crty.github.io/helm-charts"
+    alias: app
