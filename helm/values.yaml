@@ -1,0 +1,7 @@
+app:
+  port: 80
+  image: davidcrty/crty-dev
+  ingress:
+    enabled: true
+    hosts:
+      - crty.dev

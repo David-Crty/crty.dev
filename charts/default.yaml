@@ -1,5 +1,0 @@
-app:
-  appName: crty.dev
-  host: crty.dev
-  port: 80
-  https: true
