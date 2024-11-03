@@ -5,3 +5,8 @@ app:
     enabled: true
     hosts:
       - crty.dev
+      - www.crty.dev
+    redirections:
+      - from:
+          - www.crty.dev
+        to: crty.dev

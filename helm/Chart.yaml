@@ -6,6 +6,6 @@ version: 0.0.1
 appVersion: "0.0.1"
 dependencies:
   - name: generic-app
-    version: 0.3.5
+    version: 0.3.6
     repository: "https://david-crty.github.io/helm-charts"
     alias: app
