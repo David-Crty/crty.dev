@@ -2,7 +2,11 @@ app:
   port: 80
   image: davidcrty/crty-dev
   ingress:
-    type: IngressRoute
     enabled: true
     hosts:
-      - tetoo.crty.dev
+      - crty.dev
+      - www.crty.dev
+    redirections:
+      - from:
+          - www.crty.dev
+        to: crty.dev
