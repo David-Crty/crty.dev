@@ -2,6 +2,7 @@ app:
   port: 80
   image: davidcrty/crty-dev
   ingress:
+    type: IngressRoute
     enabled: true
     hosts:
       - crty.dev
