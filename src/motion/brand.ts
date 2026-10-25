@@ -8,7 +8,11 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, ScrollToPlugin, SplitText);
 
 const root = document.documentElement;
 const prop = (name: string, el: Element = root) => getComputedStyle(el).getPropertyValue(name).trim();
-const seconds = (name: string) => parseFloat(prop(name)) / 1000;
+/** CSS times in seconds, in whichever unit the stylesheet ends up writing them (minifiers turn 900ms into .9s). */
+const seconds = (name: string) => {
+  const value = prop(name);
+  return parseFloat(value) / (value.endsWith('ms') ? 1000 : 1);
+};
 
 function bezier(name: string) {
   const [a, b, c, d] = (prop(name).match(/-?[\d.]+/g) ?? ['0', '0', '1', '1']).map(Number);
