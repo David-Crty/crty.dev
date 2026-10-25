@@ -9,7 +9,7 @@ site until this is wired up.
 
 - `crty.dev` is delegated to Route 53 (`ns-*.awsdns-*`), so the records can be
   managed from Terraform with the Route 53 provider.
-- The default branch is `master`; the rename to `main` is a separate task.
+- The default branch is `main`.
 
 ## Open questions
 
