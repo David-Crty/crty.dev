@@ -26,10 +26,10 @@ function mount({ replay = false } = {}) {
     const tape = findTape();
     const edge = document.querySelector<HTMLElement>('.site main section > .edge');
     let story: (() => void) | undefined;
-    const roll = () => {
+    const roll = (fresh = false) => {
       if (!tape) return;
       glint(tape);
-      story = light ? bandsStory(tape) : diagonalStory(tape, { wide });
+      story = light ? bandsStory(tape, { fresh }) : diagonalStory(tape, { wide, fresh });
     };
     // the hero tape becomes this edge on the way down, so it waits for it
     if (tape) edge?.classList.add('is-pending');
@@ -44,7 +44,7 @@ function mount({ replay = false } = {}) {
           if (!alive) return;
           introDone = true;
           try { sessionStorage.setItem(SEEN, '1'); } catch {}
-          ctx.add(roll);
+          ctx.add(() => roll(true));
         });
       });
       if (wide) ident!.play();

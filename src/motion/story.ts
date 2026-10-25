@@ -47,9 +47,10 @@ const LAG = 0.2;
 /**
  * Scrubs a scene with the page's scroll, from the top down to where it lands. The story
  * chases the scroll position rather than sitting on it, and never faster than SHORTEST
- * allows, so a quick flick still plays the whole shot.
+ * allows, so a quick flick still plays the whole shot. A `fresh` story starts from the hero
+ * tape even when the page has already scrolled, and plays its way down to it.
  */
-function drive(scene: Scene) {
+function drive(scene: Scene, fresh = false) {
   let p = 0, target = 0;
   const trigger = ScrollTrigger.create({
     start: 0,
@@ -70,7 +71,7 @@ function drive(scene: Scene) {
   };
   gsap.ticker.add(follow);
   target = trigger.progress;
-  p = target;
+  p = fresh ? 0 : target;
   scene.measure();
   scene.render(p);
   return () => {
@@ -114,7 +115,7 @@ const WEIGHTS = [0.55, 0.32, 0.7, 0.22, 0.45, 0.14];
  * into the gap above the first section, then narrows past the title and lands as the
  * featured card's edge. Every line is the tape's own colour; nothing cuts.
  */
-export function diagonalStory(t: Tape, { wide = true } = {}) {
+export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
   const at = landing();
   if (!at) return;
   const per = wide ? 4 : 2;
@@ -195,7 +196,7 @@ export function diagonalStory(t: Tape, { wide = true } = {}) {
       ribbon.clip({ x0: 0, y0: 0, x1: W, y1: floor }, g.holes);
     },
   };
-  return drive(scene);
+  return drive(scene, fresh);
 }
 
 /**
@@ -204,7 +205,7 @@ export function diagonalStory(t: Tape, { wide = true } = {}) {
  * feeds through behind that band one bar at a time, coming out underneath as the featured
  * card's edge.
  */
-export function bandsStory(t: Tape) {
+export function bandsStory(t: Tape, { fresh = false } = {}) {
   const at = landing();
   if (!at) return;
   const colours = palette();
@@ -277,7 +278,7 @@ export function bandsStory(t: Tape) {
       ribbon.clip({ x0: 0, y0: 0, x1: g.W, y1: floor }, g.holes);
     },
   };
-  return drive(scene);
+  return drive(scene, fresh);
 }
 
 const arrived = new WeakSet<Element>();
