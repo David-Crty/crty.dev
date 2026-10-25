@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../node_modules/@fontsource-variable/archivo/wdth.css">
+<link rel="stylesheet" href="../../node_modules/@fontsource-variable/martian-mono/index.css">
+<link rel="stylesheet" href="../../src/styles/tokens.css">
+<style>
+  html, body { margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: var(--ground); color: var(--ink); font-family: var(--font-sans); }
+  .label { font-family: var(--font-mono); font-size: 18px; line-height: 24px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .copy { position: absolute; left: 72px; top: 96px; }
+  .spec { color: var(--accent); margin-bottom: 28px; }
+  h1 { margin: 0; font-size: 118px; line-height: .9; font-weight: 800; font-stretch: 125%; letter-spacing: -.01em; }
+  .outline { margin: 22px 0 0; font-size: 52px; line-height: 1; font-weight: 700; font-stretch: 62%; letter-spacing: .02em; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+  .url { position: absolute; left: 72px; bottom: 64px; color: var(--ink-muted); }
+  .tape { position: absolute; display: flex; flex-direction: column; transform-origin: left top; transform: rotate(-38deg); }
+  .tape i { display: block; height: 14px; }
+  .tape i:nth-child(1) { background: var(--band-1); } .tape i:nth-child(2) { background: var(--band-2); } .tape i:nth-child(3) { background: var(--band-3); }
+  .tape i:nth-child(4) { background: var(--band-4); } .tape i:nth-child(5) { background: var(--band-5); } .tape i:nth-child(6) { background: var(--band-6); }
+  .a { left: 700px; top: 700px; width: 420px; }
+  .b { left: 990px; top: 420px; width: 520px; }
+  .b::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 90px; background: linear-gradient(90deg, rgba(0,0,0,.75), rgba(0,0,0,0)); }
+</style>
+</head>
+<body>
+  <div class="tape a"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="tape b"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="copy">
+    <div class="spec label">DevOps · SRE · Backend</div>
+    <h1>David<br>Courtey</h1>
+    <p class="outline">Site reliability engineer</p>
+  </div>
+  <div class="url label">crty.dev · Barcelona</div>
+</body>
+</html>

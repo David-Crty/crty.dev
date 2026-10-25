@@ -15,7 +15,7 @@ const words = (post.body ?? '').split(/\s+/).filter(Boolean).length;
 const minutes = Math.max(1, Math.round(words / 230));
 ---
 
-<Base title={`${post.data.title} · ${site.name}`} description={post.data.description}>
+<Base title={`${post.data.title} · ${site.name}`} description={post.data.description} type="article" published={post.data.date}>
   <article>
     <header class="page-head">
       <div class="spec label">

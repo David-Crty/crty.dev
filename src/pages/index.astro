@@ -6,11 +6,22 @@ import FeaturedRepo from '../components/FeaturedRepo.astro';
 import ContribList from '../components/ContribList.astro';
 import PostList from '../components/PostList.astro';
 import { getPosts } from '../lib/posts.ts';
+import { site, social } from '../data/site.ts';
 
 const posts = (await getPosts()).slice(0, 5);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: 'Freelance SRE and DevOps engineer',
+  address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+  sameAs: [social.github.href, social.linkedin.href, social.x.href],
+};
 ---
 
 <Base>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(person)} />
   <Hero />
 
   <section id="work" aria-labelledby="h-maintained">

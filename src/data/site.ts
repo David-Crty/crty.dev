@@ -14,6 +14,7 @@ export const site = {
     'Freelance SRE and DevOps engineer in Barcelona. I build platforms on Kubernetes and AWS, keep them boring with GitOps, and write backend code in PHP.',
   spec: 'T-120 · HIGH GRADE · BARCELONA',
   email: 'david@crty.dev',
+  twitter: '@DCourtey',
   locale: 'en',
 } as const;
 
