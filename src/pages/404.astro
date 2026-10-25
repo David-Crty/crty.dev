@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.ts';
+
+const heading = 'Tracking lost.';
+---
+
+<Base title={`Not found · ${site.name}`} description="This page is not on the tape.">
+  <div class="lost">
+    <div class="tracking" aria-hidden="true"></div>
+    <div class="spec label">Error 404 · Blank tape</div>
+    <h1 class="post-h1 glitch" data-text={heading}>{heading}</h1>
+    <p class="lede">Nothing was recorded at this address. The page may have moved, or it never existed.</p>
+    <div class="links label"><a href="/">Back home →</a></div>
+  </div>
+</Base>
+
+<style>
+  .lost { position: relative; padding: var(--space-8) 0 var(--space-7); overflow: hidden; }
+  .lost .post-h1 { font-size: clamp(48px, 11vw, 96px); line-height: .9; }
+
+  .glitch { position: relative; }
+  .glitch::before, .glitch::after {
+    content: attr(data-text); position: absolute; inset: 0; background: var(--ground);
+    clip-path: inset(100% 0 0 0); pointer-events: none;
+  }
+  .glitch::before { animation: slip 5s steps(1, end) infinite; }
+  .glitch::after { animation: slip-b 5s steps(1, end) infinite; }
+
+  @keyframes slip {
+    0%, 86%, 100% { clip-path: inset(100% 0 0 0); transform: none; }
+    87% { clip-path: inset(18% 0 64% 0); transform: translateX(-10px); }
+    89% { clip-path: inset(52% 0 30% 0); transform: translateX(14px); }
+    91% { clip-path: inset(70% 0 12% 0); transform: translateX(-6px); }
+    93% { clip-path: inset(100% 0 0 0); transform: none; }
+  }
+  @keyframes slip-b {
+    0%, 88%, 100% { clip-path: inset(100% 0 0 0); transform: none; }
+    89% { clip-path: inset(34% 0 52% 0); transform: translateX(8px); }
+    92% { clip-path: inset(8% 0 84% 0); transform: translateX(-12px); }
+    94% { clip-path: inset(100% 0 0 0); transform: none; }
+  }
+
+  .tracking {
+    position: absolute; left: 0; right: 0; top: 0; height: 28px; z-index: 1; pointer-events: none; opacity: .5;
+    background: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 3px);
+    animation: roll 7s linear infinite;
+  }
+  @keyframes roll {
+    from { transform: translateY(-40px); }
+    to { transform: translateY(560px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glitch::before, .glitch::after, .tracking { animation: none; }
+    .tracking { display: none; }
+  }
+  @media (max-width: 760px) {
+    .lost { padding-top: var(--space-6); }
+  }
+</style>
