@@ -8,7 +8,7 @@
   --hero-h: 640px;
   --display-stretch: 125%;
   --display-weight: 800;
-  --edge-h: 4px;
+  --edge-h: 8px;
 
   background: var(--ground);
   color: var(--ink);
@@ -23,7 +23,6 @@
   --hero-h: 800px;
   --display-stretch: 100%;
   --display-weight: 900;
-  --edge-h: 8px;
 }
 
 .site *, .site *::before, .site *::after { box-sizing: border-box; }
@@ -85,7 +84,7 @@
 
 /* ---------- featured repo ---------- */
 .site .edge { display: flex; flex-direction: column; }
-.site .edge i { height: 8px; }
+.site .edge i { height: var(--edge-h); }
 .site .edge i:nth-child(1) { background: var(--band-1); } .site .edge i:nth-child(2) { background: var(--band-2); } .site .edge i:nth-child(3) { background: var(--band-3); }
 .site .edge i:nth-child(4) { background: var(--band-4); } .site .edge i:nth-child(5) { background: var(--band-5); } .site .edge i:nth-child(6) { background: var(--band-6); }
 .site .feature { background: var(--ground-raised); display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-6); padding: var(--space-6); }
@@ -141,6 +140,5 @@
 .site .rewind { color: var(--ink-muted); }
 .site .rewind:hover { color: var(--accent); }
 .site .base { margin-top: var(--space-6); }
-.site .base i { height: var(--edge-h); }
 .site .legal { color: var(--ink-muted); margin-top: var(--space-4); }
 
