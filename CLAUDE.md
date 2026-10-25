@@ -13,5 +13,6 @@ Read `docs/design-system.md` before touching anything visual: it holds the rules
 express (no VCR kitsch, one tape per page, what each token is for, content rules).
 
 `src/styles/tokens.css` is the source of truth for token values, and `src/styles/bundle.css` for
-how the two modes differ. The site began from a Design System artifact on claude.ai; that is a
-historical snapshot and the code has moved on, so never sync from it.
+how the two modes differ. Motion is `src/motion/` plus `src/styles/motion.css`; its rules are in
+the Motion section of the design system doc. The site began from a Design System artifact on
+claude.ai; that is a historical snapshot and the code has moved on, so never sync from it.

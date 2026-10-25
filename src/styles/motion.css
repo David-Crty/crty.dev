@@ -1,0 +1,108 @@
+/* The motion system. Every animation on the site reads its ease and timing from here, and
+   src/motion/brand.ts reads the same properties, so CSS transitions, GSAP timelines and view
+   transitions all move like one tape brand. Angles stay with the layout in bundle.css. */
+
+:root {
+  /* Fitted to the hairline in the reference: fast off the mark, still moving when it stops. */
+  --ease-tape: cubic-bezier(.15, .16, .24, .7);
+  /* For things that change shape in place: angle, thickness, count. */
+  --ease-tape-swing: cubic-bezier(.65, 0, .25, 1);
+  --tape-quick: 240ms;
+  --tape-base: 520ms;
+  --tape-long: 900ms;
+  --tape-stagger: 70ms;
+}
+
+/* The theme switch's tape swings to the new sleeve's angle before it opens: diagonal into
+   dark, nearly flat into light, and steeper on a portrait screen. */
+:root, [data-theme="dark"] { --wipe-angle: -38deg; }
+[data-theme="light"] { --wipe-angle: -14deg; }
+@media (orientation: portrait) {
+  :root, [data-theme="dark"] { --wipe-angle: -64deg; }
+  [data-theme="light"] { --wipe-angle: -40deg; }
+}
+
+/* Until the script takes over, the hero tape and the card edge it becomes wait rather than
+   flash their end state. If the script never runs, they show up on their own. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  html:not(.motion) .site .tapes,
+  html:not(.motion) .site main section > .edge { opacity: 0; animation: tape-failsafe 0s 2.5s forwards; }
+}
+@keyframes tape-failsafe { to { opacity: 1; } }
+
+/* ---------- hero idents (src/motion/hero.ts) ---------- */
+/* The tab that slides down the dark band printing the label: a flap of sleeve standing
+   upright on the tape, square to the page, its trailing side shading the stripes. */
+.site .tape .tab { position: absolute; left: 0; top: -34px; bottom: -4px; width: 46px; z-index: 8; transform-origin: 0 34px; background: var(--ground); }
+.site .tape .tab::after { content: ""; position: absolute; left: 100%; top: 0; bottom: 0; width: 64px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ground) 72%, transparent), transparent); }
+/* The ink band the light stack is carried in on. */
+.site .tape .ink { position: absolute; left: -25%; right: -25%; top: 0; bottom: 0; z-index: -1; background: var(--ink); }
+/* A glint of light that runs up the tape at rest. */
+.site .tape .glint { position: absolute; inset: 0 auto 0 0; width: 180px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .38), transparent); mix-blend-mode: soft-light; }
+
+/* ---------- scroll stories (src/motion/story.ts) ---------- */
+/* While the story has the tape on its way down, the real tape and the edge it lands as stand aside. */
+.site .tape.is-away > i, .site .tape.is-away > .glint, .site .edge.is-pending > i { visibility: hidden; }
+/* Loose stripes in page coordinates, under the section heads so the light band can swallow them. */
+.site { position: relative; }
+.site > .ribbon { position: absolute; left: 0; top: 0; width: 100%; overflow: clip; pointer-events: none; z-index: 0; }
+.site > .ribbon i { position: absolute; left: 0; top: 0; width: 2400px; height: 24px; transform-origin: 0 0; will-change: transform; }
+
+/* ---------- arrivals (src/motion/reveal.ts) ---------- */
+/* Split text's word masks, grown on every side so no glyph is cropped, without moving a thing. */
+.site .word-mask { padding: .14em .08em .24em; margin: -.14em -.08em -.24em; }
+.site .sec-head > .run, .site .row > .run { position: absolute; height: 1px; pointer-events: none; }
+.site .shelf.is-arriving .row { transition: none; }
+
+/* ---------- hovers (src/motion/hover.ts) ---------- */
+/* Dark rows: the script's band follows the pointer's side, so the CSS one stands down. */
+html.has-bands .site .row::after { display: none; }
+.site .row > .band { position: absolute; left: 0; right: 0; bottom: -1px; height: 6px; pointer-events: none;
+  background: linear-gradient(var(--band-1) 0 16.6%, var(--band-2) 0 33.3%, var(--band-3) 0 50%, var(--band-4) 0 66.6%, var(--band-5) 0 83.3%, var(--band-6) 0); }
+/* Light shelf: three blocks rise through a spine's tab. */
+.site .shelf .row > .mark { position: absolute; top: 0; bottom: 0; right: 0; width: 120px; z-index: 1; display: flex; pointer-events: none;
+  clip-path: polygon(24px 0, 100% 0, 100% 100%, 0 100%); }
+.site .shelf .row > .mark i { flex: 1; }
+.site .shelf .row > .mark i:nth-child(1) { background: var(--band-1); }
+.site .shelf .row > .mark i:nth-child(2) { background: var(--band-3); }
+.site .shelf .row > .mark i:nth-child(3) { background: var(--band-5); }
+@media (max-width: 760px) { .site .shelf .row > .mark { width: 56px; } }
+
+/* A short run of tape passes along a link's underline, once, like a pulse down a line. */
+.site .links a { position: relative; overflow: clip; }
+.site .links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; pointer-events: none; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent 62%, var(--band-1) 62% 68%, var(--band-2) 68% 74%, var(--band-3) 74% 80%, var(--band-4) 80% 86%, var(--band-5) 86% 92%, var(--band-6) 92% 98%, transparent 98%); }
+.site .links a:hover::after, .site .links a:focus-visible::after { animation: tape-pulse var(--tape-long) var(--ease-tape); }
+@keyframes tape-pulse { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .site .row::after, .site .shelf .row { transition: none !important; }
+  .site .links a::after { display: none; }
+}
+
+/* ---------- theme switch (src/motion/theme.ts) ---------- */
+/* The new theme shows only inside the opening tape; the script moves the opening. */
+html.is-switching-theme::view-transition-old(root),
+html.is-switching-theme::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+html.is-switching-theme::view-transition-new(root) { clip-path: var(--switch-clip, inset(50% 50%)); }
+.tape-switch { position: fixed; inset: 0; z-index: 100; overflow: hidden; pointer-events: none; }
+.tape-switch > * { position: absolute; left: 0; top: 0; width: 2400px; height: 24px; transform-origin: 0 0; }
+
+/* ---------- page transitions: one band of ink wipes the next page in, like the 21 s shot ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+html:not(.is-switching-theme)::view-transition { background: var(--ink); }
+html:not(.is-switching-theme)::view-transition-old(root),
+html:not(.is-switching-theme)::view-transition-new(root) {
+  mix-blend-mode: normal;
+  mask-size: 300% 300%;
+  mask-repeat: no-repeat;
+  animation: page-wipe calc(var(--tape-long) * .8) var(--ease-tape) both;
+}
+/* the old page goes ahead of the band, with a soft leading edge; the new one follows it in */
+html:not(.is-switching-theme)::view-transition-old(root) { mask-image: linear-gradient(calc(var(--wipe-angle) + 180deg), transparent calc(50% + 7vmax), #000 calc(50% + 7vmax + 10px)); }
+html:not(.is-switching-theme)::view-transition-new(root) { mask-image: linear-gradient(calc(var(--wipe-angle) + 180deg), #000 calc(50% - 7vmax), transparent calc(50% - 7vmax)); }
+@keyframes page-wipe { from { mask-position: 100% 100%; } to { mask-position: 0% 0%; } }

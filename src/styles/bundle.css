@@ -8,9 +8,7 @@
   --hero-h: 640px;
   --display-stretch: 125%;
   --display-weight: 800;
-  --edge-h: 2px;
-  --ease-out: cubic-bezier(.2, .7, .2, 1);
-  --ease-swing: cubic-bezier(.65, 0, .25, 1);
+  --edge-h: 4px;
 
   background: var(--ground);
   color: var(--ink);
@@ -25,7 +23,7 @@
   --hero-h: 800px;
   --display-stretch: 100%;
   --display-weight: 900;
-  --edge-h: 4px;
+  --edge-h: 8px;
 }
 
 .site *, .site *::before, .site *::after { box-sizing: border-box; }
@@ -57,9 +55,11 @@
 .site .links a { border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
 .site .links a:hover { color: var(--accent); border-color: var(--accent); }
 
-/* ---------- the tape: one element, diagonal in dark, flat in light ---------- */
+/* ---------- the tape: one band, rising from the hero's foot in dark, lying flat in light ---------- */
 .site .tapes { position: absolute; top: -96px; height: calc(100% + 96px); left: calc(50% - 50vw); width: 100vw; overflow: hidden; pointer-events: none; }
-.site .tape { position: absolute; display: flex; flex-direction: column; transform-origin: left top; transform: rotate(var(--tape-angle)); }
+/* it starts clear of the 600px copy column, so it never crosses text */
+.site .tape { position: absolute; display: flex; flex-direction: column; transform-origin: left top; transform: rotate(var(--tape-angle));
+  left: max(calc(100% - 660px), calc(max(var(--space-6), (100% - 1104px) / 2) + 612px)); top: 780px; width: 1400px; }
 .site .tape i { display: block; height: var(--band-h); }
 .site .tape i:nth-child(1) { background: var(--band-1); }
 .site .tape i:nth-child(2) { background: var(--band-2); }
@@ -67,21 +67,15 @@
 .site .tape i:nth-child(4) { background: var(--band-4); }
 .site .tape i:nth-child(5) { background: var(--band-5); }
 .site .tape i:nth-child(6) { background: var(--band-6); }
-.site .tape.a { left: calc(100% - 660px); top: 780px; width: 560px; animation: crty-draw 760ms var(--ease-out) both; }
-.site .tape.b { left: calc(100% - 190px); top: 400px; width: 820px; animation: crty-draw 1000ms 620ms var(--ease-out) both; }
-.site .tape.b::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 90px; background: linear-gradient(90deg, rgba(0,0,0,.75), rgba(0,0,0,0)); }
-.site .along { position: absolute; left: calc(100% - 140px); top: 346px; transform-origin: left top; transform: rotate(var(--tape-angle)); white-space: nowrap; animation: crty-fade 600ms 1400ms both; }
+/* the label rides the band's top edge */
+.site .along { position: absolute; left: 260px; bottom: calc(100% + 2px); white-space: nowrap; }
 .site .along b { font-weight: 800; font-stretch: 125%; font-size: 15px; letter-spacing: .06em; margin-right: 12px; font-family: var(--font-sans); }
-[data-theme="light"] .site .tape.a { left: 0; top: 720px; width: 50%; }
-[data-theme="light"] .site .tape.b { left: 50%; top: 720px; width: calc(50% + 20px); }
-[data-theme="light"] .site .tape.b::before { opacity: 0; }
-[data-theme="light"] .site .along { left: calc(100% - 360px); top: 690px; }
-@keyframes crty-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-@keyframes crty-fade { from { opacity: 0; } to { opacity: 1; } }
+[data-theme="light"] .site .tape { left: 0; top: 720px; width: 100%; }
+[data-theme="light"] .site .along { left: auto; right: 24px; bottom: calc(100% + 14px); }
 
 /* ---------- section heads ---------- */
 .site section { padding: var(--space-7) 0 0; }
-.site .sec-head { display: flex; align-items: baseline; gap: var(--space-4); margin-bottom: var(--space-6); }
+.site .sec-head { display: flex; align-items: baseline; gap: var(--space-4); margin-bottom: var(--space-6); position: relative; z-index: 1; }
 .site .sec-head .num { font-family: var(--font-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .08em; color: var(--accent); }
 .site h2 { margin: 0; font-size: 40px; line-height: 1.05; font-weight: var(--display-weight); font-stretch: var(--display-stretch); }
 [data-theme="light"] .site .sec-head { display: grid; grid-template-columns: 132px 1fr; align-items: end; margin-bottom: var(--space-5); }
@@ -114,11 +108,11 @@
 /* dark: the six bands wipe in under the row */
 .site .row::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 6px;
   background: linear-gradient(var(--band-1) 0 16.6%, var(--band-2) 0 33.3%, var(--band-3) 0 50%, var(--band-4) 0 66.6%, var(--band-5) 0 83.3%, var(--band-6) 0);
-  clip-path: inset(0 100% 0 0); transition: clip-path 420ms var(--ease-out); }
+  clip-path: inset(0 100% 0 0); transition: clip-path var(--tape-base) var(--ease-tape); }
 .site .row:hover::after, .site .row:focus-visible::after { clip-path: inset(0 0 0 0); }
 /* light: contributions become tape spines on a shelf */
 [data-theme="light"] .site .rows.shelf { border-top: 0; display: grid; gap: var(--space-2); }
-[data-theme="light"] .site .shelf .row { background: var(--ground-raised); border: 1px solid var(--rule); padding-right: 152px; align-items: center; transition: transform 260ms var(--ease-out); }
+[data-theme="light"] .site .shelf .row { background: var(--ground-raised); border: 1px solid var(--rule); padding-right: 152px; align-items: center; transition: transform var(--tape-quick) var(--ease-tape); }
 [data-theme="light"] .site .shelf .row:hover, [data-theme="light"] .site .shelf .row:focus-visible { transform: translateX(16px); }
 [data-theme="light"] .site .shelf .row .repo { font-family: var(--font-sans); font-size: 20px; font-weight: 900; }
 [data-theme="light"] .site .shelf .row::after { left: auto; top: 0; bottom: 0; right: 0; width: 120px; height: auto; clip-path: polygon(24px 0, 100% 0, 100% 100%, 0 100%); transition: none; background: var(--band-1); }
@@ -137,27 +131,16 @@
 
 /* ---------- footer ---------- */
 .site footer { margin-top: var(--space-7); padding: var(--space-7) 0 var(--space-6); position: relative; }
-[data-theme="light"] .site footer { background: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 7px); }
+[data-theme="light"] .site footer { isolation: isolate; }
+/* the ruled paper sits on its own layer so it can be printed in a line at a time */
+[data-theme="light"] .site footer::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 7px); clip-path: inset(0 0 calc(100% - var(--ruled, 100%)) 0); }
 .site .foot { display: flex; justify-content: space-between; align-items: end; }
 .site .foot h2 { font-size: 72px; line-height: .95; background: none; color: var(--ink); padding: 0; clip-path: none; }
 [data-theme="light"] .site .foot h2 { font-size: 96px; letter-spacing: -.04em; }
 .site .rewind { color: var(--ink-muted); }
 .site .rewind:hover { color: var(--accent); }
 .site .base { margin-top: var(--space-6); }
-.site .base i { height: calc(var(--edge-h) * 2); }
+.site .base i { height: var(--edge-h); }
 .site .legal { color: var(--ink-muted); margin-top: var(--space-4); }
 
-/* ---------- the switch: colours crossfade, the tape swings, the type morphs ---------- */
-.is-switching .site, .is-switching .site * {
-  transition: background-color 700ms ease, color 700ms ease, border-color 700ms ease, -webkit-text-stroke-color 700ms ease,
-              font-stretch 900ms var(--ease-swing), font-weight 900ms var(--ease-swing) !important;
-}
-.is-switching .site .hero { transition: height 900ms var(--ease-swing) !important; }
-.is-switching .site .tape { transition: left 900ms var(--ease-swing), top 900ms var(--ease-swing), width 900ms var(--ease-swing), transform 900ms var(--ease-swing) !important; }
-.is-switching .site .tape i { transition: background-color 700ms ease, height 900ms var(--ease-swing) !important; }
-.is-switching .site .along { transition: left 900ms var(--ease-swing), top 900ms var(--ease-swing), transform 900ms var(--ease-swing) !important; }
-
-@media (prefers-reduced-motion: reduce) {
-  .site .tape, .site .along { animation: none; }
-  .site .row::after, .site .shelf .row { transition: none !important; }
-}

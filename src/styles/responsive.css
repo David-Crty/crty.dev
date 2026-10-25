@@ -9,14 +9,10 @@
   .site .hero-copy { padding-top: var(--space-6); }
   .site .tapes { position: relative; order: 2; top: 0; height: var(--tapes-h); margin-top: var(--space-5); }
 
-  .site .tape.a { left: 6vw; top: 40vw; width: 56vw; }
-  .site .tape.b { left: 52vw; top: 19vw; width: 70vw; }
-  .site .along { left: calc(57vw - 7px); top: calc(17vw - 21px); }
-  [data-theme="light"] .site .tape.a { left: 0; top: 40px; width: 50%; }
-  [data-theme="light"] .site .tape.b { left: 50%; top: 40px; width: calc(50% + 20px); }
-  [data-theme="light"] .site .along { left: max(var(--space-3), calc(100% - 390px)); top: 10px; }
-
-  .is-switching .site .tapes { transition: height 900ms var(--ease-swing) !important; }
+  .site .tape { left: 4vw; top: 41vw; width: 110vw; }
+  .site .along { left: 44vw; }
+  [data-theme="light"] .site .tape { left: 0; top: 40px; width: 100%; }
+  [data-theme="light"] .site .along { left: auto; right: var(--space-3); }
 
   .site .feature { grid-template-columns: 1fr; }
   .site .feature dl { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: var(--space-5); }

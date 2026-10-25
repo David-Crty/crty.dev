@@ -4,6 +4,7 @@
 @import './bundle.css';
 @import './article.css';
 @import './responsive.css';
+@import './motion.css';
 
 html, body { margin: 0; background: var(--ground); }
 html { scroll-behavior: smooth; }

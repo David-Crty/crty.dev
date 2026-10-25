@@ -68,5 +68,11 @@ const showWriting = (await getPosts()).length > 0;
       </div>
       <Footer />
     </div>
+    <script>
+      // The content is on screen before the motion is even fetched.
+      const boot = () => setTimeout(() => import('../motion/index.ts'), 120);
+      if (document.readyState === 'complete') boot();
+      else addEventListener('load', boot, { once: true });
+    </script>
   </body>
 </html>

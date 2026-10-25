@@ -80,6 +80,44 @@ modes; Martian Mono for labels. Both are self-hosted through `@fontsource-variab
   40px angled cuts take the place of rounded corners (section-title band, spine tabs).
 - No shadows.
 
+## Motion
+
+The sober layout stays still; the tape moves. Every animation is one tape brand: the same six
+bands, the same angles and the same ease. Tokens live in `src/styles/motion.css` and
+`src/motion/brand.ts` reads them, so CSS transitions, GSAP timelines and view transitions
+cannot drift apart.
+
+- `--ease-tape` is the house ease, fitted to a tape being drawn on a blank-tape sleeve: fast
+  off the mark, still moving when it stops. `--ease-tape-swing` is only for shapes changing in
+  place (angle, thickness, count). Timings are `--tape-quick`, `--tape-base`, `--tape-long`
+  and `--tape-stagger`; the theme switch reads `--wipe-angle`.
+- Each skin has its own ident, played on load (`hero.ts`). Dark: a gold hairline draws up the
+  diagonal, the band grows out of it a stripe at a time, and a tab slides down it printing the
+  label. Light: an ink band carries three thin stripes in at an angle, they flatten into bars
+  with black separators, then three bars become six.
+- Scrolling from the hero to the first section is one continuous shot, scrubbed by the scroll
+  (`story.ts`): the hero tape comes apart and lands as the featured card's edge. Dark: the band
+  peels into hairlines that fan flat into the gap above the section. Light: the stack opens
+  into ruled bars, narrows in a stair and feeds through behind the section band. The loose
+  stripes live on one layer (`lines.ts`) that is clipped away from all copy, so the tape never
+  crosses text.
+- Further down, each part plays one shot as it arrives (`reveal.ts`): headings, row rules and
+  shelf spines, the footer's ruled paper and strip. Hovers are small tape moves (`hover.ts`):
+  a dark row's band runs in from the side the pointer came from, a light spine raises a
+  three-colour mark. `◀◀ Rewind` scrolls back up on the swing ease, so the story plays
+  backwards on the way (`rewind.ts`).
+- The theme switch is one tape too (`theme.ts`): a hairline shoots out of the toggle at the old
+  skin's angle, grows its stripes, swings to the new skin's angle and opens with the new theme
+  inside. Without view transitions the opening fills with the new ground instead. Page
+  transitions are CSS only, in `motion.css`; the 404 glitch is `lost.ts`.
+- Each scene's end state is the plain CSS design: motion only plays towards it, never holds
+  content hostage. Text is never hidden at load, nothing that is on screen when the page opens
+  is re-revealed, and split text goes back exactly where it was.
+- Animate `transform`, `opacity` and `clip-path` only (view transitions also use masks). No
+  layout properties, no shadows, no glows.
+- The motion code is loaded after the content has painted and is never inlined: the CSP
+  allows one inline script, `ThemeScript.astro`.
+
 ## Focus and themes
 
 - Focus: 2px solid `accent` outline, 3px offset, 3:1 or better on `ground` and `ground-raised`
