@@ -9,6 +9,7 @@
   --display-stretch: 125%;
   --display-weight: 800;
   --edge-h: 8px;
+  --tape-dim: 1;
 
   background: var(--ground);
   color: var(--ink);

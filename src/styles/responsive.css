@@ -1,18 +1,26 @@
-/* Below the desktop reference. The tape leaves the hero column and sits full-bleed under
-   the copy, shallower in dark and flat in light, so it never crosses text. */
+/* Below the desktop reference. There is no room beside the copy: in dark the tape runs
+   full-bleed behind it, faded by --tape-dim so the text stays readable, and the scroll story
+   brings it back to full strength on its way down; in light it lies flat under the copy. */
 
 @media (max-width: 960px) {
-  .site { --tape-angle: -20deg; --band-h: 8px; --tapes-h: 46vw; }
-  [data-theme="light"] .site { --tape-angle: 0deg; --band-h: 14px; --tapes-h: calc(var(--band-h) * 6 + 40px); }
+  .site { --band-h: 10px; --tape-dim: .5; }
+  [data-theme="light"] .site { --band-h: 14px; --tape-dim: 1; }
 
-  .site .hero { height: auto; display: flex; flex-direction: column; }
+  .site .hero { height: auto; padding-bottom: var(--space-6); }
   .site .hero-copy { padding-top: var(--space-6); }
-  .site .tapes { position: relative; order: 2; top: 0; height: var(--tapes-h); margin-top: var(--space-5); }
+  /* ink-muted falls under 4.5:1 on the faded stripes; ink stays above it */
+  .site .intro { color: var(--ink); }
+  .site .tapes { top: 0; height: 100%; }
 
-  .site .tape { left: 4vw; top: 41vw; width: 110vw; }
-  .site .along { left: 44vw; }
+  /* rises from the hero's foot so the whole band leaves through the left edge */
+  .site .tape { left: -30vw; top: calc(100% + 23.4vw - 96px); width: 220vw; opacity: var(--tape-dim); }
+  .site .along { display: none; }
+
+  [data-theme="light"] .site .hero { display: flex; flex-direction: column; padding-bottom: 0; }
+  [data-theme="light"] .site .intro { color: var(--ink-muted); }
+  [data-theme="light"] .site .tapes { position: relative; order: 2; height: calc(var(--band-h) * 6 + 40px); margin-top: var(--space-5); }
   [data-theme="light"] .site .tape { left: 0; top: 40px; width: 100%; }
-  [data-theme="light"] .site .along { left: auto; right: var(--space-3); }
+  [data-theme="light"] .site .along { display: block; left: auto; right: var(--space-3); }
 
   .site .feature { grid-template-columns: 1fr; }
   .site .feature dl { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: var(--space-5); }

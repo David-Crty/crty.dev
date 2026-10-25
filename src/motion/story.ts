@@ -39,6 +39,12 @@ function slideLabel(label: HTMLElement, p: number, by: number) {
   label.style.opacity = k ? String(1 - k) : '';
 }
 
+/**
+ * How faded the tape at rest is. Below desktop it runs behind the copy at this strength, so
+ * the story starts there, needs no cut-out for the copy, and comes up to full on the way down.
+ */
+const dimOf = (t: Tape) => Math.min(1, parseFloat(token('--tape-dim', t.box)) || 1);
+
 /** The shortest the whole story can play in, however fast the page is scrolled. */
 const SHORTEST = dur.long * 2;
 /** How long the story takes to settle on the scroll when it is not speed-limited. */
@@ -125,7 +131,7 @@ export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
 
   let g = {} as {
     W: number; O: [number, number]; a: [number, number]; n: [number, number]; h: number; L: number;
-    floor: number; r0: number; r1: number; x0: number; edge: Box; eh: number; holes: Box[]; spread: number;
+    floor: number; r0: number; r1: number; x0: number; edge: Box; eh: number; holes: Box[]; spread: number; dim: number;
   };
 
   const scene: Scene = {
@@ -136,6 +142,7 @@ export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
       const title = boxOf(at.title);
       const copy = boxOf(at.copy, 14);
       const edge = boxOf(at.edge);
+      const dim = dimOf(t);
       g = {
         W: pageWidth(),
         O: [box.x0 + t.tape.offsetLeft, box.y0 + t.tape.offsetTop],
@@ -149,8 +156,9 @@ export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
         x0: title.x1 + (wide ? 40 : 18),
         edge,
         eh: edge.y1 > edge.y0 ? (edge.y1 - edge.y0) / 6 : 2,
-        holes: [copy, boxOf(at.top, 8), { x0: 0, y0: head.y0 - 10, x1: title.x1 + 22, y1: head.y1 + 10 }],
+        holes: [...(dim < 1 ? [] : [copy]), boxOf(at.top, 8), { x0: 0, y0: head.y0 - 10, x1: title.x1 + 22, y1: head.y1 + 10 }],
         spread: wide ? 380 : 110,
+        dim,
       };
     },
     end() {
@@ -165,6 +173,7 @@ export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
       if (!handOver(scene, p)) return;
 
       const { O, a, n, h, L, W, edge, eh } = g;
+      const fade = mix(g.dim, 1, slice(p, 0.45, 0.7));
       const ray = (d: number): Seg => {
         const px = O[0] + n[0] * d, py = O[1] + n[1] * d;
         return { px, py, qx: px + a[0] * L, qy: py + a[1] * L, t: h, a: 1 };
@@ -190,7 +199,7 @@ export function diagonalStory(t: Tape, { wide = true, fresh = false } = {}) {
         s = blend(s, flat, ease.swing(slice(p, sB, sB + 0.26)));
         s = blend(s, gathered, ease.swing(slice(p, sC, sC + 0.18)));
         s = blend(s, landed, ease.tape(slice(p, sD, sD + 0.13)));
-        ribbon.draw(j, s);
+        ribbon.draw(j, { ...s, a: s.a * fade });
       }
       const floor = mix(mix(g.floor, g.r1 + 6, slice(p, 0.2, 0.4)), edge.y1 + 2, slice(p, 0.55, 0.68));
       ribbon.clip({ x0: 0, y0: 0, x1: W, y1: floor }, g.holes);
@@ -212,7 +221,7 @@ export function bandsStory(t: Tape, { fresh = false } = {}) {
   const ink = token('--ink');
   const ribbon = new Ribbon(document.querySelector('.site')!, [...colours, ...Array.from({ length: 5 }, () => ink)]);
 
-  let g = {} as { W: number; x: number; y: number; w: number; h: number; floor: number; band: Box; edge: Box; eh: number; holes: Box[]; low: number };
+  let g = {} as { W: number; x: number; y: number; w: number; h: number; floor: number; band: Box; edge: Box; eh: number; holes: Box[]; low: number; dim: number };
 
   const scene: Scene = {
     ribbon,
@@ -221,6 +230,7 @@ export function bandsStory(t: Tape, { fresh = false } = {}) {
       const head = boxOf(at.head);
       const num = boxOf(at.num, 14);
       const edge = boxOf(at.edge);
+      const dim = dimOf(t);
       g = {
         W: pageWidth(),
         x: box.x0 + t.tape.offsetLeft,
@@ -231,8 +241,9 @@ export function bandsStory(t: Tape, { fresh = false } = {}) {
         band: boxOf(at.title),
         edge,
         eh: edge.y1 > edge.y0 ? (edge.y1 - edge.y0) / 6 : 4,
-        holes: [boxOf(at.copy, 14), boxOf(at.top, 8), { x0: 0, y0: num.y0, x1: num.x1, y1: num.y1 }],
+        holes: [...(dim < 1 ? [] : [boxOf(at.copy, 14)]), boxOf(at.top, 8), { x0: 0, y0: num.y0, x1: num.x1, y1: num.y1 }],
         low: head.y0 - 8,
+        dim,
       };
     },
     end() {
@@ -251,6 +262,7 @@ export function bandsStory(t: Tape, { fresh = false } = {}) {
       const pitch = bar + gap;
       const drop = Math.max(0, g.low - (g.y + 6 * pitch - gap));
       const left = band.x0 + 48, right = band.x1;
+      const fade = mix(g.dim, 1, slice(p, 0.15, 0.45));
       for (let j = 0; j < 11; j++) {
         const separator = j >= 6;
         const r = separator ? j - 6 : j;
@@ -272,7 +284,7 @@ export function bandsStory(t: Tape, { fresh = false } = {}) {
           s = blend(s, fed, ease.swing(slice(p, sC, sC + 0.22)));
           s = blend(s, landed, ease.tape(slice(p, sC + 0.2, sC + 0.3)));
         }
-        ribbon.draw(j, s);
+        ribbon.draw(j, { ...s, a: s.a * fade });
       }
       const floor = mix(g.floor, edge.y1 + 2, slice(p, 0.04, 0.3));
       ribbon.clip({ x0: 0, y0: 0, x1: g.W, y1: floor }, g.holes);

@@ -49,7 +49,7 @@ design; the kitsch comes from imitating the VCR itself.
 | `rule` | Hairlines, the spec list divider, the light footer's paper lines. Decorative, never the only boundary of a control. |
 | `accent` | Role label, small section numbers (dark), link hover, primary button, focus ring. Yellow in dark, crimson in light (usable as text on paper, 5.3:1). |
 | `on-accent` | Text on an `accent` fill. |
-| `band-1`…`band-6` | The tape. Dark: yellow, orange, red, magenta, blue, green. Light: a warm stack from yellow to aubergine. Decorative only: never set text on a band. |
+| `band-1`…`band-6` | The tape. Dark: yellow, orange, red, magenta, blue, green. Light: a warm stack from yellow to aubergine. Decorative only: never set text on a band at full strength. |
 
 Text must reach 4.5:1 on its ground in both modes (3:1 at 24px+, for control borders, focus
 rings and icons).
@@ -76,6 +76,12 @@ modes; Martian Mono for labels. Both are self-hosted through `@fontsource-variab
 - Contributions and posts are rows, not cards: hairline-divided in dark; in light,
   contributions become separate spines with a coloured angled tab.
 - Keep the hero copy inside its 600px column so the dark tape never crosses text.
+- Below desktop (960px) there is no room beside the copy. Dark: the tape runs full-bleed
+  behind it, rising from the hero's foot and leaving through the left edge, faded to
+  `--tape-dim` (0.5). That is the one place text sits over the tape, and only `ink` may: it
+  holds 4.5:1 over every faded band, `ink-muted` does not, so the intro is set in `ink`
+  there. Raise `--tape-dim` only after re-checking that contrast. Light: the flat stack keeps
+  its own strip under the copy, at full strength.
 - Everything is square (`radius-0`); `radius-sm` is only for focus-ring corners. In light mode,
   40px angled cuts take the place of rounded corners (section-title band, spine tabs).
 - No shadows.
@@ -100,7 +106,8 @@ cannot drift apart.
   peels into hairlines that fan flat into the gap above the section. Light: the stack opens
   into ruled bars, narrows in a stair and feeds through behind the section band. The loose
   stripes live on one layer (`lines.ts`) that is clipped away from all copy, so the tape never
-  crosses text.
+  crosses text. Below desktop in dark, the story starts at the faded tape behind the copy instead,
+  skips that cut-out, and only comes up to full strength once the stripes are below the copy.
 - Further down, each part plays one shot as it arrives (`reveal.ts`): headings, row rules and
   shelf spines, the footer's ruled paper and strip. Hovers are small tape moves (`hover.ts`):
   a dark row's band runs in from the side the pointer came from, a light spine raises a
