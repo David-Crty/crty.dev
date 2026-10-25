@@ -1,4 +1,4 @@
-import { gsap, ScrollTrigger, ease, mix, slice, palette, token } from './brand';
+import { gsap, ScrollTrigger, ease, dur, mix, slice, palette, token } from './brand';
 import { Ribbon, boxOf, type Box, type Seg } from './lines';
 import type { Tape } from './hero';
 
@@ -39,27 +39,43 @@ function slideLabel(label: HTMLElement, p: number, by: number) {
   label.style.opacity = k ? String(1 - k) : '';
 }
 
-/** Scrubs a scene with the page's scroll, from the top down to where it lands. */
+/** The shortest the whole story can play in, however fast the page is scrolled. */
+const SHORTEST = dur.long * 2;
+/** How long the story takes to settle on the scroll when it is not speed-limited. */
+const LAG = 0.2;
+
+/**
+ * Scrubs a scene with the page's scroll, from the top down to where it lands. The story
+ * chases the scroll position rather than sitting on it, and never faster than SHORTEST
+ * allows, so a quick flick still plays the whole shot.
+ */
 function drive(scene: Scene) {
-  const state = { p: 0 };
-  const tween = gsap.to(state, {
-    p: 1,
-    ease: 'none',
-    scrollTrigger: {
-      start: 0,
-      end: () => scene.end(),
-      scrub: 0.6,
-      invalidateOnRefresh: true,
-      onRefreshInit: () => scene.measure(),
-      onRefresh: () => scene.render(state.p),
-    },
-    onUpdate: () => scene.render(state.p),
+  let p = 0, target = 0;
+  const trigger = ScrollTrigger.create({
+    start: 0,
+    end: () => scene.end(),
+    invalidateOnRefresh: true,
+    onRefreshInit: () => scene.measure(),
+    onRefresh: (self) => { target = self.progress; scene.render(p); },
+    onUpdate: (self) => { target = self.progress; },
   });
+  const follow = (_: number, ms: number) => {
+    const gap = target - p;
+    if (!gap) return;
+    const dt = Math.min(ms, 100) / 1000;
+    const cap = dt / SHORTEST;
+    const step = gsap.utils.clamp(-cap, cap, gap * (1 - Math.exp(-dt / LAG)));
+    p = Math.abs(gap) < 1e-4 ? target : p + step;
+    scene.render(p);
+  };
+  gsap.ticker.add(follow);
+  target = trigger.progress;
+  p = target;
   scene.measure();
-  scene.render(state.p);
+  scene.render(p);
   return () => {
-    tween.scrollTrigger?.kill();
-    tween.kill();
+    gsap.ticker.remove(follow);
+    trigger.kill();
     scene.ribbon.remove();
     scene.tape.classList.remove('is-away');
     scene.edge.classList.remove('is-pending');
