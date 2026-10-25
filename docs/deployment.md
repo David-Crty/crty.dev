@@ -46,7 +46,10 @@ console.log("sha256-"+require("crypto").createHash("sha256").update(h).digest("b
 
 Everything else stays external on purpose (`assetsInlineLimit: 0`,
 `inlineStylesheets: 'never'`), so no other hash is needed. The JSON-LD block is
-data, not script. `style-src-attr 'unsafe-inline'` is for Shiki, which colours
+data, not script. The Umami tracker is the one external origin:
+`https://stats.crty.dev` is allowed in `script-src` (its `script.js`) and
+`connect-src` (pageviews go to its `/api/send`); `data-domains` keeps local
+builds from reporting. `style-src-attr 'unsafe-inline'` is for Shiki, which colours
 code blocks through `style` attributes; it allows attributes only, never
 `<style>` blocks or script.
 
