@@ -1,9 +1,12 @@
 {
-  "fetchedAt": "2026-10-25T09:56:27.552Z",
+  "fetchedAt": "2026-10-25T13:32:17.112Z",
   "stars": {
     "David-Crty/databasement": 2572
   },
   "mergedPRs": {
-    "jankeesvw/omarchy-notification-center": 1
+    "vuetifyjs/vuetify": 1,
+    "symfony/symfony": 1,
+    "Sylius/Sylius": 2,
+    "robsontenorio/mary": 1
   }
 }

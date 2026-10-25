@@ -24,10 +24,9 @@ export const maintained: MaintainedRepo = {
   status: 'Active',
 };
 
-// TODO: the real list of upstream repos. The one entry is repeated to fill the
-// layout until it is known.
 export const contributions: Contribution[] = [
-  { repo: 'jankeesvw/omarchy-notification-center', description: 'Clicking a Slack notification opens the conversation.' },
-  { repo: 'jankeesvw/omarchy-notification-center', description: 'Clicking a Slack notification opens the conversation.' },
-  { repo: 'jankeesvw/omarchy-notification-center', description: 'Clicking a Slack notification opens the conversation.' },
+  { repo: 'vuetifyjs/vuetify', description: 'VTreeView keeps async children selected in independent selection mode.' },
+  { repo: 'symfony/symfony', description: 'RateLimiter no longer breaks when the last username is missing from the session.' },
+  { repo: 'Sylius/Sylius', description: 'AttributeBundle dependency fix and a documentation correction.' },
+  { repo: 'robsontenorio/mary', description: 'Badge component gains leading and trailing icons.' },
 ];
