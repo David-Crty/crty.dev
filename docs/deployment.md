@@ -6,9 +6,8 @@ infrastructure is Terraform in `David-Crty/infra`, under `terraform/crty.dev`.
 
 ## CI (`.github/workflows/ci.yml`)
 
-Every push and pull request type-checks and builds. On `main` (push, the daily
-05:17 UTC schedule that refreshes the GitHub stats, or a manual run) the
-`deploy` job then:
+Every push and pull request type-checks and builds. On `main` (a push or a
+manual run) the `deploy` job then:
 
 1. assumes the `crty-dev-deploy` role through GitHub OIDC: no AWS keys are
    stored anywhere, and the role only trusts runs on `main` of this repo;

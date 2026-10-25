@@ -4,9 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-  # Daily rebuild so the GitHub stats on the homepage stay fresh.
-  schedule:
-    - cron: '17 5 * * *'
   workflow_dispatch:
 
 permissions:
