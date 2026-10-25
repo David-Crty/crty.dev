@@ -1,0 +1,68 @@
+/* The CV page. Rows like the Writing list, no tape; printed, it is the PDF. */
+
+.site .cv .page-head .links { margin-top: var(--space-5); }
+.site .print-only { display: none; }
+
+.site .jobs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+[data-theme="light"] .site .jobs { border-top: 2px solid var(--ink); }
+.site .job { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-5); padding: var(--space-5) var(--space-3); border-bottom: 1px solid var(--rule); position: relative; }
+.site .job > .run { position: absolute; height: 1px; pointer-events: none; }
+.site .job .meta { margin: 6px 0 0; color: var(--ink-muted); }
+.site .job .body { max-width: 680px; }
+.site .job h3 { margin: 0; font-size: 28px; line-height: 1.1; font-weight: var(--display-weight); font-stretch: var(--display-stretch); }
+.site .job .role { margin: var(--space-1) 0 var(--space-3); color: var(--accent); font-weight: 600; }
+.site .job p { margin: 0; }
+.site .job ul { margin: var(--space-3) 0 0; padding-left: var(--space-4); color: var(--ink-muted); }
+.site .job li + li { margin-top: var(--space-1); }
+.site .job li::marker { color: var(--rule); }
+[data-theme="light"] .site .job li::marker { color: var(--ink-muted); }
+.site .job .stack { margin-top: var(--space-4); color: var(--ink-muted); }
+.site .job .role + .stack { margin-top: 0; }
+
+.site .facts { margin: 0; border-top: 1px solid var(--rule); }
+.site .facts > div { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-5); padding: var(--space-3); border-bottom: 1px solid var(--rule); align-items: baseline; }
+.site .facts dt { color: var(--ink-muted); }
+.site .facts dd { margin: 0; }
+[data-theme="light"] .site .facts { border-top: 2px solid var(--ink); }
+
+@media (max-width: 760px) {
+  .site .job, .site .facts > div { grid-template-columns: 1fr; gap: var(--space-2); }
+  .site .job .meta { margin: 0; }
+  .site .job h3 { font-size: 24px; }
+}
+
+@page { size: A4; margin: 14mm 16mm; }
+
+@media print {
+  html, body { background: #fff; }
+  [data-theme] .site {
+    --ground: #fff; --ground-raised: #fff; --ink: #000; --ink-muted: #4a4a4a; --rule: #cfcfcf; --accent: #000;
+    --display-stretch: 100%; --display-weight: 800;
+    font-size: 10pt; line-height: 1.45; overflow: visible;
+  }
+  [data-theme] .site .top, [data-theme] .site footer, [data-theme] .site .skip, [data-theme] .site .cv .links { display: none; }
+  [data-theme] .site .print-only { display: block; margin: 8pt 0 0; }
+  [data-theme] .site .wrap { max-width: none; padding: 0; }
+
+  [data-theme] .site .page-head { padding: 0; }
+  [data-theme] .site .page-head .spec { margin-bottom: 6pt; }
+  [data-theme] .site .post-h1 { font-size: 26pt; }
+  [data-theme] .site .lede { margin-top: 8pt; max-width: none; font-size: 10.5pt; }
+
+  [data-theme] .site section { padding-top: 16pt; }
+  [data-theme] .site .sec-head { display: block; margin-bottom: 6pt; }
+  [data-theme] .site .sec-head .num { display: none; }
+  [data-theme] .site .sec-head h2 { font-size: 14pt; background: none; color: var(--ink); padding: 0; clip-path: none; }
+
+  [data-theme] .site .jobs, [data-theme] .site .facts { border-top: 1pt solid var(--ink); }
+  [data-theme] .site .job { grid-template-columns: 128pt 1fr; gap: 12pt; padding: 8pt 0; break-inside: avoid; }
+  [data-theme] .site .job .meta { margin-top: 2pt; font-size: 7.5pt; }
+  [data-theme] .site .job .body { max-width: none; }
+  [data-theme] .site .job h3 { font-size: 12pt; }
+  [data-theme] .site .job .role { margin: 0 0 3pt; }
+  [data-theme] .site .job ul { margin-top: 3pt; }
+  [data-theme] .site .job li + li { margin-top: 0; }
+  [data-theme] .site .job .stack { margin-top: 4pt; font-size: 7.5pt; }
+  [data-theme] .site .facts > div { grid-template-columns: 128pt 1fr; gap: 12pt; padding: 4pt 0; break-inside: avoid; }
+  [data-theme] .site .label { font-size: 7.5pt; line-height: 1.4; }
+}

@@ -37,6 +37,9 @@ design; the kitsch comes from imitating the VCR itself.
 - No icon set and no third-party logos. Links are text labels (`GitHub ↗`, `LinkedIn ↗`, `X ↗`).
 - Homepage order: top bar (wordmark, nav, mode toggle), hero (role label, name, outline line,
   intro, links), Maintained, Contributing to, Writing, contact footer.
+- The CV (`/cv/`, data in `src/data/cv.ts`) is the only CV. Its print stylesheet is the PDF:
+  there is no separate file to fall out of date. No phone number, birth date or nationality on
+  the site.
 
 ## Colour
 

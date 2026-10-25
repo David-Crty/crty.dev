@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { education, jobs, lede, skills } from '../data/cv.ts';
+import { contactLinks, site, social } from '../data/site.ts';
+
+const month = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const when = (d: string) => month.format(new Date(`${d}-01T00:00:00Z`));
+const bare = (href: string) => href.replace(/^(https?:\/\/|mailto:)/, '').replace(/\/$/, '');
+---
+
+<Base title={`CV · ${site.name}`} description={`${site.name}, freelance SRE and DevOps engineer in Barcelona: experience, skills and education.`}>
+  <div class="cv">
+    <header class="page-head">
+      <div class="spec label">Curriculum vitae · Barcelona</div>
+      <h1 class="post-h1">{site.name}</h1>
+      <p class="lede">{lede}</p>
+      <div class="links label">
+        {contactLinks.map((l) => <a href={l.href}>{l.label} ↗</a>)}
+      </div>
+      <p class="print-only label">
+        {[social.email.href, site.url, social.linkedin.href, social.github.href].map(bare).join(' · ')}
+      </p>
+    </header>
+
+    <section aria-labelledby="h-experience">
+      <SectionHead num={1} title="Experience" id="h-experience" />
+      <ol class="jobs">
+        {jobs.map((j) => (
+          <li class="job">
+            <p class="label meta">
+              <time datetime={j.from}>{when(j.from)}</time> — {j.to ? <time datetime={j.to}>{when(j.to)}</time> : 'Now'}
+            </p>
+            <div class="body">
+              <h3>{j.org}</h3>
+              <p class="role">{j.role}</p>
+              {j.summary && <p>{j.summary}</p>}
+              {j.points && <ul>{j.points.map((p) => <li>{p}</li>)}</ul>}
+              <p class="stack label">{j.stack.join(' · ')}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="h-skills">
+      <SectionHead num={2} title="Skills" id="h-skills" />
+      <dl class="facts">
+        {skills.map((s) => <div><dt class="label">{s.term}</dt><dd>{s.detail}</dd></div>)}
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-education">
+      <SectionHead num={3} title="Education" id="h-education" />
+      <dl class="facts">
+        {education.map((e) => <div><dt class="label">{e.term}</dt><dd>{e.detail}</dd></div>)}
+      </dl>
+    </section>
+  </div>
+</Base>

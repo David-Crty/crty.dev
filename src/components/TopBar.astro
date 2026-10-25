@@ -9,6 +9,7 @@ const { showWriting } = Astro.props;
 const onHome = Astro.url.pathname === '/';
 const nav = [
   { label: 'Work', href: '#work' },
+  { label: 'CV', href: '/cv/' },
   ...(showWriting ? [{ label: 'Writing', href: onHome ? '#writing' : '/blog/' }] : []),
   { label: 'Contact', href: '#contact' },
 ].map((l) => ({ ...l, href: onHome || l.href.startsWith('/') ? l.href : `/${l.href}` }));

@@ -74,8 +74,8 @@ export function headings() {
 export function rows() {
   const light = theme() === 'light';
   const colours = palette();
-  for (const list of document.querySelectorAll<HTMLElement>('.site .rows')) {
-    const items = [...list.querySelectorAll<HTMLElement>('.row')];
+  for (const list of document.querySelectorAll<HTMLElement>('.site .rows, .site .jobs')) {
+    const items = [...list.querySelectorAll<HTMLElement>('.row, .job')];
     if (!items.length) continue;
     onArrival(list, () => {
       const tl = gsap.timeline({ defaults: { ease: ease.tape }, onComplete: () => list.classList.remove('is-arriving') });
