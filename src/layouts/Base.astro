@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+import archivo from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import ThemeScript from '../components/ThemeScript.astro';
+import TopBar from '../components/TopBar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site.ts';
+import { getPosts } from '../lib/posts.ts';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const showWriting = (await getPosts()).length > 0;
+---
+
+<!doctype html>
+<html lang={site.locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ThemeScript />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="preload" href={archivo} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="site" id="top">
+      <a class="skip label" href="#main">Skip to content</a>
+      <div class="wrap">
+        <TopBar showWriting={showWriting} />
+        <main id="main">
+          <slot />
+        </main>
+      </div>
+      <Footer />
+    </div>
+  </body>
+</html>

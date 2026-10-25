@@ -1,0 +1,17 @@
+---
+import Tape from './Tape.astro';
+import { heroLinks, site } from '../data/site.ts';
+---
+
+<div class="hero">
+  <Tape />
+  <div class="hero-copy">
+    <div class="spec label">{site.role}</div>
+    <h1>{site.name}</h1>
+    <p class="outline">{site.outline}</p>
+    <p class="intro"><strong>Freelance SRE and DevOps engineer</strong> in Barcelona. I build platforms on Kubernetes and AWS, keep them boring with GitOps, and write backend code in PHP.</p>
+    <div class="links label">
+      {heroLinks.map((l) => <a href={l.href} rel="me">{l.label} ↗</a>)}
+    </div>
+  </div>
+</div>

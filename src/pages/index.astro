@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import FeaturedRepo from '../components/FeaturedRepo.astro';
+import ContribList from '../components/ContribList.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts.ts';
+
+const posts = (await getPosts()).slice(0, 5);
+---
+
+<Base>
+  <Hero />
+
+  <section id="work" aria-labelledby="h-maintained">
+    <SectionHead num={1} title="Maintained" id="h-maintained" />
+    <FeaturedRepo />
+  </section>
+
+  <section aria-labelledby="h-contrib">
+    <SectionHead num={2} title="Contributing to" id="h-contrib" />
+    <ContribList />
+  </section>
+
+  {posts.length > 0 && (
+    <section class="posts" id="writing" aria-labelledby="h-writing">
+      <SectionHead num={3} title="Writing" id="h-writing" />
+      <PostList posts={posts} />
+    </section>
+  )}
+</Base>

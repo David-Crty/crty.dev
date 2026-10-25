@@ -1,0 +1,22 @@
+---
+import Edge from './Edge.astro';
+import { contactLinks, site } from '../data/site.ts';
+
+const year = new Date().getFullYear();
+---
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <h2>Let’s talk.</h2>
+        <div class="links label">
+          {contactLinks.map((l) => <a href={l.href}>{l.label} ↗</a>)}
+        </div>
+      </div>
+      <a class="rewind label" href="#top">◀◀ Rewind</a>
+    </div>
+    <Edge class="base" />
+    <div class="legal label">© {year} {site.name} · Built with Astro</div>
+  </div>
+</footer>

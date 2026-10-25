@@ -1,0 +1,11 @@
+---
+interface Props {
+  num: number;
+  title: string;
+  id?: string;
+}
+
+const { num, title, id } = Astro.props;
+---
+
+<div class="sec-head"><span class="num" aria-hidden="true">{String(num).padStart(2, '0')}</span><h2 id={id}>{title}</h2></div>

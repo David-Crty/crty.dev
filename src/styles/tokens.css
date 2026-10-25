@@ -1,0 +1,51 @@
+/* Generated from the design system tokens.json. */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #0e0e10;
+  --ground-raised: #18181c;
+  --ink: #f3efe6;
+  --ink-muted: #a19d94;
+  --rule: #2c2c33;
+  --accent: #f5c400;
+  --on-accent: #0e0e10;
+  --band-1: #f5c400;
+  --band-2: #f28c00;
+  --band-3: #e4342c;
+  --band-4: #c4207c;
+  --band-5: #2b57c8;
+  --band-6: #1fa24b;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --ground: #f6f3ec;
+  --ground-raised: #ffffff;
+  --ink: #151413;
+  --ink-muted: #5d5a54;
+  --rule: #d8d3c8;
+  --accent: #c80f3c;
+  --on-accent: #ffffff;
+  --band-1: #f0b20e;
+  --band-2: #e5332a;
+  --band-3: #d10f3f;
+  --band-4: #a0114f;
+  --band-5: #5f1856;
+  --band-6: #33103a;
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 96px;
+  --space-8: 120px;
+  --radius-0: 0;
+  --radius-sm: 2px;
+  --font-sans: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Martian Mono Variable", "Martian Mono", ui-monospace, monospace;
+}

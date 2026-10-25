@@ -1,0 +1,25 @@
+---
+import ModeToggle from './ModeToggle.astro';
+
+interface Props {
+  showWriting: boolean;
+}
+
+const { showWriting } = Astro.props;
+const onHome = Astro.url.pathname === '/';
+const nav = [
+  { label: 'Work', href: '#work' },
+  ...(showWriting ? [{ label: 'Writing', href: onHome ? '#writing' : '/blog/' }] : []),
+  { label: 'Contact', href: '#contact' },
+].map((l) => ({ ...l, href: onHome || l.href.startsWith('/') ? l.href : `/${l.href}` }));
+---
+
+<header class="top">
+  <a class="mark" href="/">crty</a>
+  <div class="top-right">
+    <nav class="nav label" aria-label="Main">
+      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <ModeToggle />
+  </div>
+</header>

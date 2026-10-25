@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { postDate } from '../lib/posts.ts';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="rows">
+  {posts.map((p) => (
+    <a class="row" href={`/blog/${p.id}/`}>
+      <time class="label meta" datetime={p.data.date.toISOString()}>{postDate(p.data.date)}</time>
+      <span class="post-title">{p.data.title}</span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  ))}
+</div>

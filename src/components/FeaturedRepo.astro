@@ -1,0 +1,23 @@
+---
+import Edge from './Edge.astro';
+import { maintained } from '../data/repos.ts';
+import { githubStats } from '../lib/github.ts';
+
+const stats = await githubStats();
+const stars = stats.stars[maintained.repo];
+---
+
+<Edge />
+<article class="feature">
+  <div>
+    <h3>{maintained.name}</h3>
+    <p>{maintained.description}</p>
+    <a class="cta label" href={`https://github.com/${maintained.repo}`}>View on GitHub ↗</a>
+  </div>
+  <dl class="label">
+    <dt>Role</dt><dd>{maintained.role}</dd>
+    <dt>Stack</dt><dd>{maintained.stack}</dd>
+    <dt>Status</dt><dd>{maintained.status}</dd>
+    {stars !== undefined && <><dt>Stars</dt><dd>{stars.toLocaleString('en-US')}</dd></>}
+  </dl>
+</article>

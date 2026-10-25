@@ -1,0 +1,21 @@
+---
+import { contributions, githubUser } from '../data/repos.ts';
+import { githubStats } from '../lib/github.ts';
+
+const stats = await githubStats();
+const merged = (n: number) => `${n} ${n === 1 ? 'PR' : 'PRs'} merged`;
+---
+
+<div class="rows shelf">
+  {contributions.map((c) => {
+    const n = stats.mergedPRs[c.repo];
+    const href = `https://github.com/${c.repo}/pulls?q=${encodeURIComponent(`is:pr is:merged author:${githubUser}`)}`;
+    return (
+      <a class="row" href={href}>
+        <span class="repo">{c.repo}</span>
+        <span class="desc">{c.description}</span>
+        <span class="meta label">{n !== undefined ? merged(n) : ''}</span>
+      </a>
+    );
+  })}
+</div>

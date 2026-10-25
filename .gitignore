@@ -1,1 +1,7 @@
-/charts/charts
+node_modules/
+dist/
+.astro/
+.env
+*.mp4
+test-results/
+screenshots/

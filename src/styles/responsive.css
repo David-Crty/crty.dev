@@ -1,0 +1,57 @@
+/* Below the desktop reference. The tape leaves the hero column and sits full-bleed under
+   the copy, shallower in dark and flat in light, so it never crosses text. */
+
+@media (max-width: 960px) {
+  .site { --tape-angle: -20deg; --band-h: 8px; --tapes-h: 46vw; }
+  [data-theme="light"] .site { --tape-angle: 0deg; --band-h: 14px; --tapes-h: calc(var(--band-h) * 6 + 40px); }
+
+  .site .hero { height: auto; display: flex; flex-direction: column; }
+  .site .hero-copy { padding-top: var(--space-6); }
+  .site .tapes { position: relative; order: 2; top: 0; height: var(--tapes-h); margin-top: var(--space-5); }
+
+  .site .tape.a { left: 6vw; top: 40vw; width: 56vw; }
+  .site .tape.b { left: 52vw; top: 19vw; width: 70vw; }
+  .site .along { left: calc(57vw - 7px); top: calc(17vw - 21px); }
+  [data-theme="light"] .site .tape.a { left: 0; top: 40px; width: 50%; }
+  [data-theme="light"] .site .tape.b { left: 50%; top: 40px; width: calc(50% + 20px); }
+  [data-theme="light"] .site .along { left: max(var(--space-3), calc(100% - 390px)); top: 10px; }
+
+  .is-switching .site .tapes { transition: height 900ms var(--ease-swing) !important; }
+
+  .site .feature { grid-template-columns: 1fr; }
+  .site .feature dl { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: var(--space-5); }
+}
+
+@media (max-width: 760px) {
+  .site h1 { font-size: clamp(48px, 13vw, 96px); }
+  .site .outline { font-size: clamp(26px, 8vw, 44px); }
+  .site h2 { font-size: clamp(30px, 7.5vw, 40px); }
+  .site .feature { padding: var(--space-4); }
+  .site .feature h3 { font-size: clamp(30px, 9vw, 56px); }
+
+  .site .row { grid-template-columns: 1fr; gap: var(--space-1); }
+  .site .row .meta { text-align: left; }
+  [data-theme="light"] .site .shelf .row { padding-right: 72px; }
+  [data-theme="light"] .site .shelf .row::after { width: 56px; }
+
+  .site .posts .row { grid-template-columns: 1fr auto; grid-template-areas: "meta meta" "title arrow"; }
+  .site .posts .row .meta { grid-area: meta; }
+  .site .posts .row .post-title { grid-area: title; }
+  .site .posts .row .arrow { grid-area: arrow; }
+
+  [data-theme="light"] .site .sec-head { grid-template-columns: 88px 1fr; }
+  [data-theme="light"] .site .sec-head .num { font-size: 56px; }
+  [data-theme="light"] .site .sec-head h2 { font-size: clamp(22px, 6vw, 34px); padding-left: 52px; }
+
+  .site .foot { flex-direction: column; align-items: start; gap: var(--space-5); }
+  .site .foot h2 { font-size: clamp(48px, 14vw, 72px); }
+  [data-theme="light"] .site .foot h2 { font-size: clamp(48px, 14vw, 96px); }
+}
+
+@media (max-width: 640px) {
+  .site .wrap { padding: 0 var(--space-3); }
+  .site section { padding-top: var(--space-6); }
+  .site .top { display: grid; grid-template-columns: 1fr auto; row-gap: var(--space-3); padding: var(--space-4) 0; }
+  .site .top-right { display: contents; }
+  .site .nav { grid-column: 1 / -1; grid-row: 2; gap: var(--space-4); }
+}

@@ -1,0 +1,40 @@
+<div class="mode label" role="group" aria-label="Colour mode">
+  <button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.mode button');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  const system = matchMedia('(prefers-color-scheme: light)');
+  const current = () => (root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === current())));
+  let timer: number | undefined;
+
+  function apply(mode: string) {
+    if (mode === current()) return;
+    if (!calm.matches) {
+      root.classList.add('is-switching');
+      clearTimeout(timer);
+      timer = window.setTimeout(() => root.classList.remove('is-switching'), 1000);
+    }
+    root.setAttribute('data-theme', mode);
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const mode = b.dataset.mode ?? 'dark';
+      try { localStorage.setItem('theme', mode); } catch {}
+      apply(mode);
+    }),
+  );
+
+  system.addEventListener('change', (e) => {
+    let saved: string | null = null;
+    try { saved = localStorage.getItem('theme'); } catch {}
+    if (!saved) apply(e.matches ? 'light' : 'dark');
+  });
+
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  sync();
+</script>
