@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts.ts';
+import { site } from '../../data/site.ts';
+
+const posts = await getPosts();
+---
+
+<Base title={`Writing · ${site.name}`} description="Notes on platforms, Kubernetes, AWS and backend code.">
+  <header class="page-head">
+    <div class="spec label">Writing</div>
+    <h1 class="post-h1">Notes from the platform side</h1>
+  </header>
+  <section class="posts">
+    {posts.length > 0 ? <PostList posts={posts} /> : <p class="empty">No posts yet.</p>}
+  </section>
+</Base>

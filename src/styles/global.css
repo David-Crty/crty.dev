@@ -2,6 +2,7 @@
 @import '@fontsource-variable/martian-mono/index.css';
 @import './tokens.css';
 @import './bundle.css';
+@import './article.css';
 @import './responsive.css';
 
 html, body { margin: 0; background: var(--ground); }
