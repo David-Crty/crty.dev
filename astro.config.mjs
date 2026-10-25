@@ -7,8 +7,9 @@ export default defineConfig({
   output: 'static',
   devToolbar: { enabled: false },
   integrations: [sitemap()],
+  vite: { build: { assetsInlineLimit: 0 } },
   trailingSlash: 'always',
-  build: { format: 'directory' },
+  build: { format: 'directory', inlineStylesheets: 'never' },
   markdown: {
     shikiConfig: { theme: 'css-variables' },
   },
