@@ -1,59 +1,55 @@
-# Deployment (not done yet)
+# Deployment
 
-The site builds to static files in `dist/`. CI (`.github/workflows/ci.yml`)
-checks and builds; nothing deploys yet. The old Docker/Helm deployment was
-removed with the Hugo site, so the current crty.dev keeps serving the old
-site until this is wired up.
+Static files from `dist/` in a private S3 bucket (`crty-dev-site`, eu-west-3),
+served by CloudFront at crty.dev; www.crty.dev redirects to the apex. The
+infrastructure is Terraform in `David-Crty/infra`, under `terraform/crty.dev`.
 
-## Known facts
+## CI (`.github/workflows/ci.yml`)
 
-- `crty.dev` is delegated to Route 53 (`ns-*.awsdns-*`), so the records can be
-  managed from Terraform with the Route 53 provider.
-- The default branch is `main`.
+Every push and pull request type-checks and builds. On `main` (push, the daily
+05:17 UTC schedule that refreshes the GitHub stats, or a manual run) the
+`deploy` job then:
 
-## Open questions
+1. assumes the `crty-dev-deploy` role through GitHub OIDC: no AWS keys are
+   stored anywhere, and the role only trusts runs on `main` of this repo;
+2. uploads `_astro/` with `public, max-age=31536000, immutable` (file names are
+   hashed), never deleting old files a cached page may still reference;
+3. syncs everything else with `public, max-age=21600` (6 h) and `--delete`;
+4. invalidates `/*` on CloudFront (one path, whatever the number of files).
 
-- AWS account and region for the bucket; whether the Route 53 hosted zone is
-  in that same account.
-- Terraform state backend.
+CloudFront follows each object's `Cache-Control`. The edge is refreshed by the
+invalidation; a browser that already has a page may keep it up to 6 hours.
 
-## Plan (`infra/`, Terraform)
+The job reads three repository variables, from the Terraform outputs:
+`AWS_ROLE_ARN`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`.
 
-- Private S3 bucket, reachable only through CloudFront with Origin Access
-  Control.
-- CloudFront: ACM certificate in `us-east-1`, HTTP/2 and HTTP/3, 403/404
-  mapped to `/404.html`.
-- A CloudFront Function on viewer request rewriting `/path/` and `/path` to
-  `/path/index.html` (S3 behind OAC serves no index documents). Leave paths
-  with an extension alone.
-- Response-headers policy: HSTS, `X-Content-Type-Options: nosniff`,
-  `Referrer-Policy: strict-origin-when-cross-origin`, and this CSP:
+## CloudFront
 
-  ```
-  default-src 'self'; script-src 'self' 'sha256-ewHRV69hODM8imyUDH8JKeRkCDczYCgfgLtWQpQTS5Q='; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
-  ```
+- A CloudFront Function rewrites `/path/` to `/path/index.html` (S3 behind an
+  origin access control serves no index documents), 301s `/path` to the
+  canonical `/path/`, and 301s www to the apex.
+- 403 and 404 from S3 both serve `/404.html` with status 404.
+- Response headers: HSTS (2 years, subdomains, preload), `nosniff`,
+  `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,
+  and a CSP.
 
-  The hash is of the inline theme script in `src/components/ThemeScript.astro`
-  and changes whenever that script changes; recompute it from `dist/index.html`.
-  Everything else is external on purpose (`assetsInlineLimit: 0`,
-  `inlineStylesheets: 'never'`). The JSON-LD block is data, not script, and
-  needs no hash. `style-src-attr 'unsafe-inline'` is for Shiki, which colours
-  code blocks through `style` attributes (pointing at the token variables);
-  it allows attributes only, never `<style>` blocks or script.
-- An IAM role for GitHub Actions via OIDC (no long-lived keys), allowed to
-  `s3 sync` the bucket and create invalidations on the distribution.
+## CSP and the theme script
 
-## Plan (GitHub Actions)
+The CSP allows scripts from `'self'` plus the hash of the one inline script,
+`src/components/ThemeScript.astro`. **Changing that script changes its hash**:
+update `theme_script_hash` in `terraform/crty.dev/cdn.tf` and apply, or the
+mode is no longer set before first paint. Recompute it from a build:
 
-On push to the default branch, and daily on a schedule so GitHub stats stay
-fresh:
+```bash
+node -e 'const h=require("fs").readFileSync("dist/index.html","utf8").match(/<script>([\s\S]*?)<\/script>/)[1];
+console.log("sha256-"+require("crypto").createHash("sha256").update(h).digest("base64"))'
+```
 
-1. `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm build` (with
-   `GITHUB_TOKEN`, used for the stars and merged-PR counts).
-2. `aws s3 sync dist/_astro s3://<bucket>/_astro --cache-control "public, max-age=31536000, immutable"`
-3. `aws s3 sync dist s3://<bucket> --exclude "_astro/*" --delete --cache-control "public, max-age=0, must-revalidate"`
-4. Invalidate the HTML paths (`/`, `/*/`, `/404.html`, `/rss.xml`,
-   `/sitemap-*`) on CloudFront.
+Everything else stays external on purpose (`assetsInlineLimit: 0`,
+`inlineStylesheets: 'never'`), so no other hash is needed. The JSON-LD block is
+data, not script. `style-src-attr 'unsafe-inline'` is for Shiki, which colours
+code blocks through `style` attributes; it allows attributes only, never
+`<style>` blocks or script.
 
 ## GitHub stats
 

@@ -4,9 +4,17 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Daily rebuild so the GitHub stats on the homepage stay fresh.
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -23,3 +31,35 @@ jobs:
       - run: pnpm build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      BUCKET: ${{ vars.S3_BUCKET }}
+      IMMUTABLE: public, max-age=31536000, immutable
+      SHORT: public, max-age=21600
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-3
+      # Hashed assets first, so new pages never reference a file that isn't there yet.
+      # Old ones are kept: a page cached in a browser may still ask for them.
+      - run: aws s3 sync dist/_astro "s3://$BUCKET/_astro" --cache-control "$IMMUTABLE" --exclude '*.woff2'
+      - run: aws s3 cp dist/_astro "s3://$BUCKET/_astro" --recursive --exclude '*' --include '*.woff2' --content-type font/woff2 --cache-control "$IMMUTABLE"
+      - run: aws s3 sync dist "s3://$BUCKET" --exclude '_astro/*' --delete --cache-control "$SHORT"
+      - run: aws cloudfront create-invalidation --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths '/*'
