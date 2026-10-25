@@ -9,7 +9,8 @@
     "check": "astro check",
     "astro": "astro",
     "github:cache": "node scripts/github-cache.ts",
-    "og": "node scripts/og/render.ts"
+    "og": "node scripts/og/render.ts",
+    "icons": "node scripts/icons/render.ts"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

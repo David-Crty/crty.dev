@@ -6,6 +6,8 @@ David Courtey's personal site: Astro, static, pnpm, Node 24.
 - `pnpm github:cache` refreshes `src/data/github-cache.json`, the fallback for star and merged-PR
   counts when the GitHub API is unreachable at build time.
 - `pnpm og` re-renders `public/og.png` from `scripts/og/og.html`.
+- `pnpm icons` re-renders `favicon.ico`, `favicon-32x32.png` and `apple-touch-icon.png` in
+  `public/` from `public/favicon.svg`.
 
 ## Design
 
